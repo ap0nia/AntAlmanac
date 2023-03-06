@@ -14,6 +14,7 @@ import {
 import { LoadingButton } from '@mui/lab'
 import useSettingsStore from '$stores/settings'
 import { useScheduleStore } from '$stores/schedule'
+import { analyticsEnum, logAnalytics } from '$lib/analytics'
 import trpc from '$lib/trpc'
 
 interface Props {
@@ -31,10 +32,31 @@ export default function LoadDialog({ open, setOpen }: Props) {
   const [remember, setRemember] = useState(false)
   const isDarkMode = useSettingsStore((store) => store.isDarkMode)
   const utils = trpc.useContext()
+  const saved = useScheduleStore((store) => store.saved)
 
   const handleSubmit = async () => {
     setLoading(true)
     try {
+      logAnalytics({
+        category: analyticsEnum.nav.title,
+        action: analyticsEnum.nav.actions.LOAD_SCHEDULE,
+        label: userID,
+        value: remember ? 1 : 0,
+      })
+
+      if (
+        userID == null ||
+        (!saved && !window.confirm(`Are you sure you want to load a different schedule? You have unsaved changes!`))
+      ) {
+        return
+      }
+
+      if (remember) {
+        window.localStorage.setItem('userID', userID)
+      } else {
+        window.localStorage.removeItem('userID')
+      }
+
       const res = await utils.schedule.find.fetch(userID)
       useScheduleStore.setState(res)
       setLoading(false)

@@ -10,8 +10,11 @@ import Calendar from '$components/Calendar'
 import CourseSearch from '$components/CourseSearch'
 import AddedCourses from '$components/AddedCourses'
 import Map from '$components/Map'
+import useInitializeSchedule from '$hooks/useInitializeSchedule'
 
 export default function Home() {
+  useInitializeSchedule()
+
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [mobileTab, setMobileTab] = useState(0)
