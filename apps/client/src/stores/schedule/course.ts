@@ -36,7 +36,12 @@ interface Options {
  * @param addScheduleIndex index of schedule in the array to target
  * @param options callbacks
  */
-export function addCourse(section: WebsocSection, course: SimpleAACourse, addScheduleIndex?: number, options?: Options) {
+export function addCourse(
+  section: WebsocSection,
+  course: SimpleAACourse,
+  addScheduleIndex?: number,
+  options?: Options
+) {
   const { form } = useSearchStore.getState()
   const { schedules, scheduleIndex, previousStates } = useScheduleStore.getState()
 
