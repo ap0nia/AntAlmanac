@@ -6,6 +6,7 @@ import type { WebsocSchool } from 'peterportal-api-next-types'
 
 interface Props {
   school: WebsocSchool
+  supplemental?: boolean
 }
 
 export default function School({ school }: Props) {
@@ -26,14 +27,11 @@ export default function School({ school }: Props) {
           </Accordion>
         </Paper>
       </Grid>
-      {school.departments.map((department) => {
-        const height = department.courses.length * 60 + 60
-        return (
-          <LazyLoad once key={department.deptCode} height={height} offset={500} overflow>
-            <Department key={department.deptCode} department={department} />
-          </LazyLoad>
-        )
-      })}
+      {school.departments.map((department) => (
+        <LazyLoad once key={department.deptCode} height={department.courses.length * 50 + 100}>
+          <Department department={department} />
+        </LazyLoad>
+      ))}
     </>
   )
 }

@@ -1,3 +1,4 @@
+import LazyLoad from 'react-lazyload'
 import { Accordion, AccordionDetails, AccordionSummary, Box, Grid, Paper, Typography } from '@mui/material'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import type { WebsocDepartment } from 'peterportal-api-next-types'
@@ -24,7 +25,9 @@ export default function Department({ department }: Props) {
         </Paper>
       </Grid>
       {department.courses.map((course) => (
-        <Course key={course.courseNumber} course={course} />
+        <LazyLoad once key={course.courseNumber} height={course.sections.length * 50 + 100}>
+          <Course course={course} />
+        </LazyLoad>
       ))}
     </>
   )
