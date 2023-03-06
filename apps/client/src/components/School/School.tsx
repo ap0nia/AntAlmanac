@@ -1,4 +1,3 @@
-import LazyLoad from 'react-lazyload'
 import { Accordion, AccordionDetails, AccordionSummary, Box, Grid, Paper, Typography } from '@mui/material'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import Department from './Department'
@@ -28,9 +27,7 @@ export default function School({ school }: Props) {
         </Paper>
       </Grid>
       {school.departments.map((department) => (
-        <LazyLoad once key={department.deptCode} height={department.courses.length * 50 + 100}>
-          <Department department={department} />
-        </LazyLoad>
+        <Department key={department.deptCode} department={department} />
       ))}
     </>
   )

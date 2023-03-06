@@ -1,4 +1,5 @@
 import 'leaflet/dist/leaflet.css'
+import './Map.css'
 
 import { Fragment, useRef, useState } from 'react'
 import L from 'leaflet'
