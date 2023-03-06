@@ -8,5 +8,4 @@
 .gutter::before {
   content: '⋮';
   font-size: 30pt;
-  color: white;
 }

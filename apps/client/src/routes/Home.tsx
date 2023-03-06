@@ -92,7 +92,12 @@ export default function Home() {
       direction="horizontal"
       cursor="col-resize"
       style={{ display: 'flex', height: 'calc(100vh - 64px)' }}
-      gutterStyle={() => ({ backgroundColor: theme.palette.primary.main, width: '10px' })}
+      gutterStyle={() => ({
+        backgroundColor: theme.palette.primary.main,
+        width: '10px',
+        color: theme.palette.primary.contrastText,
+      })}
+      key={theme.palette.primary.main}
     >
       <Box sx={{ overflowY: 'auto' }}>
         <Calendar />

@@ -18,10 +18,10 @@ const lightTheme: PaletteOptions = {
 
 const darkTheme: PaletteOptions = {
   primary: {
-    main: '#BF3636',
+    main: '#ffa3a3',
   },
   secondary: {
-    main: '#BF7154',
+    main: '#e2ab98',
   },
   background: {
     default: '#303030',
