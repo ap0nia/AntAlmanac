@@ -1,11 +1,19 @@
+import { Box } from '@mui/material'
+import Department from './Department'
 import type { WebsocSchool } from 'peterportal-api-next-types'
 
 interface Props {
   school: WebsocSchool
 }
 
-export default function School() {
+export default function School({ school }: Props) {
   return (
-    <h1>HI</h1>
+    <Box>
+      {school.departments.map(department => (
+        <Box key={department.deptCode}>
+          <Department department={department} />
+        </Box>
+      ))}
+    </Box>
   )
 }

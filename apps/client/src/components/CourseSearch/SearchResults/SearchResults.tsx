@@ -4,7 +4,7 @@ import { ArrowBack as ArrowBackIcon, Refresh as RefreshIcon } from '@mui/icons-m
 import { useSearchStore } from '$stores/search'
 import useSettingsStore from '$stores/settings'
 import trpc from '$lib/trpc'
-// import Schedule from '$components/Schedule'
+import School from '$components/School'
 
 /**
  * renders the list of course search results
@@ -17,12 +17,6 @@ export default function CourseList() {
 
   // const noResultsSrc = isDarkMode ? '/no_results/dark.png' : '/no_results/light.png'
   const loadingSrc = isDarkMode ? '/loading/dark.gif' : '/loading/light.gif'
-
-  /**
-   * whether course body needs to manually search for more info
-   * @remarks prop drilling goes brrr
-   */
-  // const supplemental = form.ge !== 'ANY'
 
   const handleRefresh = () => {
     query.refetch()
@@ -55,33 +49,12 @@ export default function CourseList() {
           <Box component="img" src={loadingSrc} alt="Loading!" />
         </Box>
       )}
-      {/* query.isFetched &&
-        (transformedData.length ? (
-          <Box>
-            {transformedData.map((data, index) => {
-              const current = transformedData[index]
-              const height = 'sections' in current && current.sections ? current.sections.length * 60 + 60 : 200
-              return (
-                // eslint-disable-next-line react/no-array-index-key
-                <LazyLoad once key={index} height={height} offset={500} overflow>
-                  <Schedule course={data} supplemental={supplemental} />
-                </LazyLoad>
-              )
-            })}
+      {query.data?.schools.length &&
+        query.data.schools.map((school) => (
+          <Box key={school.schoolName}>
+            <School school={school} />
           </Box>
-        ) : (
-          <Box
-            sx={{
-              height: '100%',
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Box component="img" src={noResultsSrc} alt="No results found :(" />
-          </Box>
-          )) */}
+        ))}
     </Box>
   )
 }
