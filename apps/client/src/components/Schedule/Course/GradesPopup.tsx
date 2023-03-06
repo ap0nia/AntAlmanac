@@ -2,8 +2,8 @@ import { Chart as ChartJS, registerables } from 'chart.js'
 import type { ChartData, ChartOptions } from 'chart.js'
 import { Bar as BarChart } from 'react-chartjs-2'
 import { Box, Link, Skeleton, useMediaQuery, useTheme } from '@mui/material'
-import { useGraphqlQuery } from '$hooks/useGraphqlQuery'
 import type { WebsocCourse } from 'peterportal-api-next-types'
+import trpc from '$lib/trpc'
 
 /**
  * register everything
@@ -20,7 +20,7 @@ interface Props {
 export default function GradesPopup(props: Props) {
   const { course } = props
 
-  const query = useGraphqlQuery(course)
+  const query = trpc.graphql.stats.useQuery(course)
 
   const theme = useTheme()
   const isMobileScreen = useMediaQuery(theme.breakpoints.down('md'))

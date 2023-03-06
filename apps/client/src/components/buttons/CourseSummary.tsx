@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { InfoOutlined as InfoOutlinedIcon } from '@mui/icons-material'
 import type { WebsocCourse } from 'peterportal-api-next-types'
-import { useRestQuery } from '$hooks/useRestQuery'
+import trpc from '$lib/trpc'
 
 interface Props {
   course: WebsocCourse
@@ -21,7 +21,7 @@ export default function CourseSummaryButton({ course }: Props) {
     setAnchorEl(undefined)
   }
   const courseId = encodeURIComponent(`${course.deptCode.replace(/\s/g, '')}${course.courseNumber.replace(/\s/g, '')}`)
-  const query = useRestQuery(courseId)
+  const query = trpc.rest.course.useQuery(courseId)
 
   return (
     <>

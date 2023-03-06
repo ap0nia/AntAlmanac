@@ -7,7 +7,7 @@ const PETERPORTAL_WEBSOC_ENDPOINT = `https://api.peterportal.org/rest/v0/schedul
 /**
  * query the websocket endpoint
  */
-async function queryWebsoc(params: Record<string, string>): Promise<WebsocAPIResponse> {
+export async function queryWebsoc(params: Record<string, string>): Promise<WebsocAPIResponse> {
   const searchParams = new URLSearchParams(params)
   const response = await fetch(`${PETERPORTAL_WEBSOC_ENDPOINT}?${searchParams.toString()}`)
   const data = (await response.json()) as WebsocAPIResponse

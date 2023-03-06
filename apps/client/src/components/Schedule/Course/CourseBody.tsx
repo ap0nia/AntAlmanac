@@ -13,16 +13,16 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
+import type { WebsocCourse, WebsocSection } from 'peterportal-api-next-types'
+import type { Section } from '@packages/types'
 import locations from '$lib/location_ids'
 import { analyticsEnum } from '$lib/analytics'
 import { useSearchStore } from '$stores/search'
-import { useWebsocQuery } from '$hooks/useWebsocQuery'
+import trpc from '$lib/trpc'
 import AddCourseButton from '$components/buttons/AddCourse'
 import AddCourseMenuButton from '$components/buttons/AddCourseMenu'
 import DeleteCourseButton from '$components/buttons/DeleteCourse'
 import ColorPicker from '$components/buttons/ColorPicker'
-import type { WebsocCourse, WebsocSection } from 'peterportal-api-next-types'
-import type { Section } from '@packages/types'
 
 const restrictions: Record<string, string> = {
   A: 'A: Prerequisite required',
@@ -306,7 +306,7 @@ export default function CourseBody({ course, term, supplemental }: Props) {
    * after the supplemental prop has been prop-drilled down several layers,
    * it determines whether this query is enabled and should override the provided course data
    */
-  const query = useWebsocQuery(
+  const query = trpc.websoc.search.useQuery(
     {
       department: course.deptCode,
       term: term || form.term,

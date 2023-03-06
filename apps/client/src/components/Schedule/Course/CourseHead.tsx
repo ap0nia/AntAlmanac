@@ -5,10 +5,10 @@ import {
   RateReview as RateReviewIcon,
   ShowChart as ShowChartIcon,
 } from '@mui/icons-material'
+import type { WebsocCourse } from 'peterportal-api-next-types'
 import { analyticsEnum } from '$lib/analytics'
 import CourseSummaryButton from '$components/buttons/CourseSummary'
 import CourseReferenceButton from '$components/buttons/CourseReference'
-import type { WebsocCourse } from 'peterportal-api-next-types'
 import GradesPopup from './GradesPopup'
 
 interface Props {

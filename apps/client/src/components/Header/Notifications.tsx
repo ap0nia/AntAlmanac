@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { NotificationsOutlined as NotificationsIcon } from '@mui/icons-material'
 import { Box, IconButton, List, ListItem, Popover, Tooltip, Typography } from '@mui/material'
 import { analyticsEnum, logAnalytics } from '$lib/analytics'
+import trpc from '$lib/trpc'
 
 /**
  * notification bell that opens a modal with notifications
@@ -21,7 +22,9 @@ export default function Notifications() {
     setAnchorEl(undefined)
   }
 
-  const query: any = {}
+  const storedPhoneNumber = typeof Storage !== 'undefined' ? localStorage.getItem('phoneNumber') || '' : ''
+
+  const query = trpc.notifications.lol.useQuery(storedPhoneNumber, { enabled: !!storedPhoneNumber })
 
   return (
     <>

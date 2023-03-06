@@ -1,31 +1,28 @@
-import LazyLoad from 'react-lazyload'
+// import LazyLoad from 'react-lazyload'
 import { Box, IconButton } from '@mui/material'
 import { ArrowBack as ArrowBackIcon, Refresh as RefreshIcon } from '@mui/icons-material'
 import { useSearchStore } from '$stores/search'
 import useSettingsStore from '$stores/settings'
-import { useWebsocQuery } from '$hooks/useWebsocQuery'
-import Schedule from '$components/Schedule'
-// import type { AACourse, AASection, Department, School, WebsocResponse } from '$lib/peterportal.types'
-import type { WebsocAPIResponse } from 'peterportal-api-next-types'
+import trpc from '$lib/trpc'
+// import Schedule from '$components/Schedule'
 
 /**
  * renders the list of course search results
  */
 export default function CourseList() {
-  const { form, getParams, showResults, setShowResults } = useSearchStore()
+  const { getParams, showResults, setShowResults } = useSearchStore()
   const { isDarkMode } = useSettingsStore()
 
-  const query = useWebsocQuery(getParams(), { enabled: showResults })
-  const transformedData: WebsocAPIResponse['schools'] = []
+  const query = trpc.websoc.search.useQuery(getParams(), { enabled: showResults })
 
-  const noResultsSrc = isDarkMode ? '/no_results/dark.png' : '/no_results/light.png'
+  // const noResultsSrc = isDarkMode ? '/no_results/dark.png' : '/no_results/light.png'
   const loadingSrc = isDarkMode ? '/loading/dark.gif' : '/loading/light.gif'
 
   /**
    * whether course body needs to manually search for more info
    * @remarks prop drilling goes brrr
    */
-  const supplemental = form.ge !== 'ANY'
+  // const supplemental = form.ge !== 'ANY'
 
   const handleRefresh = () => {
     query.refetch()
@@ -58,7 +55,7 @@ export default function CourseList() {
           <Box component="img" src={loadingSrc} alt="Loading!" />
         </Box>
       )}
-      {query.isFetched &&
+      {/* query.isFetched &&
         (transformedData.length ? (
           <Box>
             {transformedData.map((data, index) => {
@@ -84,7 +81,7 @@ export default function CourseList() {
           >
             <Box component="img" src={noResultsSrc} alt="No results found :(" />
           </Box>
-        ))}
+          )) */}
     </Box>
   )
 }

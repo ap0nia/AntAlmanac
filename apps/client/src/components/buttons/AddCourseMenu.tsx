@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { IconButton, Menu, MenuItem } from '@mui/material'
 import { ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material'
+import type { WebsocSection, WebsocCourse } from 'peterportal-api-next-types'
 import { useScheduleStore } from '$stores/schedule'
 import { addCourse, addCourseToAllSchedules } from '$stores/schedule/course'
-import type { WebsocSection, WebsocCourse } from 'peterportal-api-next-types'
 
 interface Props {
   section: WebsocSection
