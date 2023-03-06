@@ -1,5 +1,3 @@
-import './Home.css'
-
 import { useState } from 'react'
 import Split from 'react-split'
 import { Box, Tab, Tabs, useMediaQuery, useTheme } from '@mui/material'

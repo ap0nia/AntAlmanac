@@ -1,4 +1,3 @@
-import LazyLoad from 'react-lazyload'
 import { Box, IconButton } from '@mui/material'
 import { ArrowBack as ArrowBackIcon, Refresh as RefreshIcon } from '@mui/icons-material'
 import { useSearchStore } from '$stores/search'
@@ -59,9 +58,7 @@ export default function CourseList() {
         (query.data?.schools.length ? (
           <Box>
             {query.data.schools.map((school) => (
-              <LazyLoad once key={school.schoolName} offset={500} overflow>
-                <School key={school.schoolName} school={school} supplemental={supplemental} />
-              </LazyLoad>
+              <School key={school.schoolName} school={school} supplemental={supplemental} />
             ))}
           </Box>
         ) : (
