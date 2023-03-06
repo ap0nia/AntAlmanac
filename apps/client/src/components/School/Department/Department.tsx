@@ -9,7 +9,7 @@ interface Props {
 export default function Department({ department }: Props) {
   return (
     <Box>
-      {department.courses.map(course => (
+      {department.courses.map((course) => (
         <Box key={course.courseNumber}>
           <Course course={course} />
         </Box>

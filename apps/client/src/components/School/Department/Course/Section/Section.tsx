@@ -6,9 +6,5 @@ interface Props {
 }
 
 export default function Section({ section }: Props) {
-  return (
-    <Box>
-      {JSON.stringify(section)}
-    </Box>
-  )
+  return <Box>{JSON.stringify(section)}</Box>
 }
