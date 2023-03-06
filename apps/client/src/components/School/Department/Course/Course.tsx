@@ -15,6 +15,8 @@ import Section from './Section'
 
 interface Props {
   course: WebsocCourse
+  term?: string
+  supplemental?: boolean
 }
 
 export default function Course({ course }: Props) {
