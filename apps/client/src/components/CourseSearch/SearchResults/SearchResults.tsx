@@ -51,12 +51,12 @@ export default function CourseList() {
       )}
       {query.data?.schools.length &&
         query.data.schools.map((school) => {
-        const height = school.departments.length * 60 + 60
-        return (
-          <LazyLoad once key={school.schoolName} height={height} offset={500} overflow>
-            <School school={school} />
-          </LazyLoad>
-        )
+          const height = school.departments.length * 60 + 60
+          return (
+            <LazyLoad once key={school.schoolName} height={height} offset={500} overflow>
+              <School school={school} />
+            </LazyLoad>
+          )
         })}
     </Box>
   )

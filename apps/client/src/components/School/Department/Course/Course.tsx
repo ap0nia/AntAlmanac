@@ -10,7 +10,17 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
+import {
+  Assessment as AssessmentIcon,
+  Assignment as AssignmentIcon,
+  RateReview as RateReviewIcon,
+  ShowChart as ShowChartIcon,
+} from '@mui/icons-material'
 import type { WebsocCourse } from 'peterportal-api-next-types'
+import { analyticsEnum } from '$lib/analytics'
+import CourseSummaryButton from '$components/buttons/CourseSummary'
+import CourseReferenceButton from '$components/buttons/CourseReference'
+import GradesPopup from './GradesPopup'
 import Section from './Section'
 
 interface Props {
@@ -20,8 +30,41 @@ interface Props {
 }
 
 export default function Course({ course }: Props) {
+  const courseId = course.deptCode.replaceAll(' ', '') + course.courseNumber
+  const encodedDept = encodeURIComponent(course.deptCode)
   return (
     <Box>
+      <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', marginY: 2 }}>
+        <CourseSummaryButton course={course} />
+        {course.prerequisiteLink && (
+          <CourseReferenceButton
+            analyticsAction={analyticsEnum.classSearch.actions.CLICK_PREREQUISITES}
+            title="Prerequisites"
+            icon={<AssignmentIcon />}
+            href={course.prerequisiteLink}
+          />
+        )}
+        <CourseReferenceButton
+          analyticsAction={analyticsEnum.classSearch.actions.CLICK_PREREQUISITES}
+          title="Reviews"
+          icon={<RateReviewIcon />}
+          href={`https://peterportal.org/course/${courseId}`}
+        />
+        <CourseReferenceButton
+          analyticsAction={analyticsEnum.classSearch.actions.CLICK_ZOTISTICS}
+          title="Zotistics"
+          icon={<AssessmentIcon />}
+        >
+          <GradesPopup course={course} />
+        </CourseReferenceButton>
+        <CourseReferenceButton
+          analyticsAction={analyticsEnum.classSearch.actions.CLICK_PAST_ENROLLMENT}
+          title="Past Enrollment"
+          icon={<ShowChartIcon />}
+          href={`https://zot-tracker.herokuapp.com/?dept=${encodedDept}&number=${course.courseNumber}&courseType=all`}
+        />
+      </Box>
+
       <TableContainer component={Paper} style={{ margin: '8px 0px 8px 0px' }} elevation={0} variant="outlined">
         <Table size="small" sx={{ '& .MuiTableCell-root': { padding: 0.5 } }}>
           <TableHead>
