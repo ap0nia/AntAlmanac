@@ -1,5 +1,5 @@
-import { useScheduleStore } from '$stores/schedule'
 import { useEffect } from 'react'
+import { useScheduleStore } from '$stores/schedule'
 
 function handleBeforeUnload(e: BeforeUnloadEvent) {
   e.returnValue = `Are you sure you want to leave? You have unsaved changes!`

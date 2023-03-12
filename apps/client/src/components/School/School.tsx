@@ -1,8 +1,8 @@
 import LazyLoad from 'react-lazyload'
 import { Accordion, AccordionDetails, AccordionSummary, Box, Grid, Paper, Typography } from '@mui/material'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
-import Department from './Department'
 import type { WebsocSchool } from 'peterportal-api-next-types'
+import Department from './Department'
 
 interface Props {
   school: WebsocSchool

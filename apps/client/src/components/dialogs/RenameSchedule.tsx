@@ -7,7 +7,6 @@ import { renameCurrentSchedule } from '$stores/schedule/schedule'
 interface Props {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  index?: number
 }
 
 /**
