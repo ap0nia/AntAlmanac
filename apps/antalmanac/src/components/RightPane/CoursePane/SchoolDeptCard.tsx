@@ -58,29 +58,28 @@ class SchoolDeptCard extends PureComponent<SchoolDeptCardProps> {
 
     render() {
         const html = { __html: this.props.comment };
-        return (
-            <Grid item xs={12}>
-                <Paper elevation={1} square style={{ overflow: 'hidden' }}>
-                    <Accordion>
-                        <AccordionSummary expandIcon={<ExpandMore />}>
-                            <Typography variant={this.props.type === 'school' ? 'h6' : 'subtitle1'}>
-                                {this.props.name}
-                            </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Typography variant="body2">
-                                <p>{this.props.comment === '' ? 'No comments found' : 'Comments:'}</p>
-                                <Box
-                                    dangerouslySetInnerHTML={html}
-                                    className={this.props.classes.comments}
-                                    component="p"
-                                />
-                            </Typography>
-                        </AccordionDetails>
-                    </Accordion>
-                </Paper>
-            </Grid>
-        );
+        return '';
+        // <Grid item xs={12}>
+        //     <Paper elevation={1} square style={{ overflow: 'hidden' }}>
+        //         <Accordion>
+        //             <AccordionSummary expandIcon={<ExpandMore />}>
+        //                 <Typography variant={this.props.type === 'school' ? 'h6' : 'subtitle1'}>
+        //                     {this.props.name}
+        //                 </Typography>
+        //             </AccordionSummary>
+        //             <AccordionDetails>
+        //                 <Typography variant="body2">
+        //                     <p>{this.props.comment === '' ? 'No comments found' : 'Comments:'}</p>
+        //                     <Box
+        //                         dangerouslySetInnerHTML={html}
+        //                         className={this.props.classes.comments}
+        //                         component="p"
+        //                     />
+        //                 </Typography>
+        //             </AccordionDetails>
+        //         </Accordion>
+        //     </Paper>
+        // </Grid>
     }
 }
 
