@@ -377,8 +377,7 @@ const SectionTableBody = withStyles(styles)((props: SectionTableBodyProps) => {
     const [activeColumns, setColumns] = useState(RightPaneStore.getActiveColumns());
 
     const toggleHighlight = useCallback(() => {
-        const doAdd = AppStore.getAddedSectionCodes().has(`${section.sectionCode} ${term}`);
-        setAddedCourse(doAdd);
+        setAddedCourse(AppStore.getAddedSectionCodes().has(`${section.sectionCode} ${term}`));
     }, [setAddedCourse, AppStore.getAddedSectionCodes]);
 
     const handleColumnChange = useCallback(
