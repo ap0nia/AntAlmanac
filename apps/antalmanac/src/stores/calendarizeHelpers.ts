@@ -1,5 +1,5 @@
 import { ScheduleCourse } from './schedule.types';
-import { CourseEvent, CustomEvent } from '$components/Calendar/CourseCalendarEvent';
+import { CourseEvent, CustomCalendarEvent } from '$components/Calendar/CourseCalendarEvent';
 import { RepeatingCustomEvent } from '$components/Calendar/Toolbar/CustomEventDialog/CustomEventDialog';
 
 export const calendarizeCourseEvents = (currentCourses: ScheduleCourse[] = []) => {
@@ -114,7 +114,7 @@ export const calendarizeFinals = (currentCourses: ScheduleCourse[] = []) => {
 };
 
 export const calendarizeCustomEvents = (currentCustomEvents: RepeatingCustomEvent[] = []) => {
-    const customEventsInCalendar: CustomEvent[] = [];
+    const customEventsInCalendar: CustomCalendarEvent[] = [];
 
     for (const customEvent of currentCustomEvents) {
         for (let dayIndex = 0; dayIndex < customEvent.days.length; dayIndex++) {

@@ -1,15 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import 'leaflet.locatecontrol';
 
 import Leaflet, { Control, LeafletMouseEvent } from 'leaflet';
 import React, { PureComponent } from 'react';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { LeafletContext, Map, Marker, Polyline, TileLayer, withLeaflet } from 'react-leaflet';
 
-import { CalendarEvent, CourseEvent, CustomEvent } from '../../Calendar/CourseCalendarEvent';
+import { AnyCalendarEvent, CourseEvent, CustomCalendarEvent } from '../../Calendar/CourseCalendarEvent';
 import RightPaneStore, { BuildingFocusInfo } from '../RightPaneStore';
 import locations from '../SectionTable/static/locations.json';
 import MapMarker from './MapMarker';
@@ -69,12 +64,12 @@ interface UCIMapState {
     day: number;
     selectedMarker: Marker | null;
     selected: string | null;
-    eventsInCalendar: CalendarEvent[];
+    eventsInCalendar: AnyCalendarEvent[];
     poly: Polyline[];
     info_markers: [string[], string, string][];
     info_marker: Marker | null;
     pins: Record<string, [CourseEvent, number][]>;
-    customEventPins: Record<string, [CustomEvent, number][]>;
+    customEventPins: Record<string, [CustomCalendarEvent, number][]>;
 }
 class UCIMap extends PureComponent  {
     state: UCIMapState = {

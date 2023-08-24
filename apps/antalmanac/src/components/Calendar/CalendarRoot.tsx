@@ -9,7 +9,7 @@ import { PureComponent, SyntheticEvent } from 'react';
 import { Calendar, DateLocalizer, momentLocalizer, Views } from 'react-big-calendar';
 
 import CalendarToolbar from './CalendarToolbar';
-import CourseCalendarEvent, { CalendarEvent } from './CourseCalendarEvent';
+import CourseCalendarEventDisplay, { AnyCalendarEvent } from './CourseCalendarEvent';
 import AppStore from '$stores/AppStore';
 
 const localizer = momentLocalizer(moment);
@@ -57,37 +57,41 @@ const styles: Styles<Theme, object> = {
     },
 };
 
-const AntAlmanacEvent =
-    ({ classes }: { classes: ClassNameMap }) =>
-    // eslint-disable-next-line react/display-name
-    ({ event }: { event: CalendarEvent }) => {
-        if (!event.isCustomEvent)
-            return (
-                <div>
-                    <div className={classes.firstLineContainer}>
-                        <div> {event.title}</div>
-                        <div className={classes.sectionType}> {event.sectionType}</div>
-                    </div>
-                    <div className={classes.secondLineContainer}>
-                        <div>{event.bldg}</div>
-                        <div>{event.sectionCode}</div>
-                    </div>
+const InnerAntAlmanacEvent = withStyles(styles)((props: { classes: ClassNameMap; event: AnyCalendarEvent }) => {
+    const { classes, event } = props;
+
+    if (!event.isCustomEvent) {
+        return (
+            <div>
+                <div className={classes.firstLineContainer}>
+                    <div> {event.title}</div>
+                    <div className={classes.sectionType}>{event.sectionType}</div>
                 </div>
-            );
-        else {
-            return (
-                <div>
-                    <div className={classes.firstLineContainer}>
-                        <div>{event.title}</div>
-                        <div className={classes.sectionType}> Event</div>
-                    </div>
-                    <div className={classes.secondLineContainer}>
-                        <div>{event.bldg}</div>
-                    </div>
+                <div className={classes.secondLineContainer}>
+                    <div>{event.bldg}</div>
+                    <div>{event.sectionCode}</div>
                 </div>
-            );
-        }
-    };
+            </div>
+        );
+    } else {
+        return (
+            <div>
+                <div className={classes.firstLineContainer}>
+                    <div>{event.title}</div>
+                    <div className={classes.sectionType}> Event</div>
+                </div>
+                <div className={classes.secondLineContainer}>
+                    <div>{event.bldg}</div>
+                </div>
+            </div>
+        );
+    }
+});
+
+function AntAlmanacEvent(props: { event: AnyCalendarEvent }) {
+    return <InnerAntAlmanacEvent event={props.event} />;
+}
+
 interface ScheduleCalendarProps {
     classes: ClassNameMap;
     isMobile: boolean;
@@ -98,13 +102,14 @@ interface ScheduleCalendarState {
     anchorEl: HTMLElement | null;
     showFinalsSchedule: boolean;
     moreInfoOpen: false;
-    courseInMoreInfo: CalendarEvent | null;
+    courseInMoreInfo: AnyCalendarEvent | null;
     calendarEventKey: number | null;
-    eventsInCalendar: CalendarEvent[];
-    finalsEventsInCalendar: CalendarEvent[];
+    eventsInCalendar: AnyCalendarEvent[];
+    finalsEventsInCalendar: AnyCalendarEvent[];
     currentScheduleIndex: number;
     scheduleNames: string[];
 }
+
 class ScheduleCalendar extends PureComponent<ScheduleCalendarProps, ScheduleCalendarState> {
     state: ScheduleCalendarState = {
         screenshotting: false,
@@ -119,7 +124,7 @@ class ScheduleCalendar extends PureComponent<ScheduleCalendarProps, ScheduleCale
         scheduleNames: AppStore.getScheduleNames(),
     };
 
-    static eventStyleGetter = (event: CalendarEvent) => {
+    static eventStyleGetter = (event: AnyCalendarEvent) => {
         return {
             style: {
                 backgroundColor: event.color,
@@ -202,7 +207,7 @@ class ScheduleCalendar extends PureComponent<ScheduleCalendarProps, ScheduleCale
         });
     };
 
-    handleEventClick = (event: CalendarEvent, e: SyntheticEvent<HTMLElement, Event>) => {
+    handleEventClick = (event: AnyCalendarEvent, e: SyntheticEvent<HTMLElement, Event>) => {
         const { currentTarget } = e;
         e.stopPropagation();
 
@@ -251,9 +256,9 @@ class ScheduleCalendar extends PureComponent<ScheduleCalendarProps, ScheduleCale
                         !this.state.screenshotting
                             ? calStyling
                             : {
-                                  height: '100%',
-                                  width: '1000px',
-                              }
+                                height: '100%',
+                                width: '1000px',
+                            }
                     }
                 >
                     <Popper
@@ -276,16 +281,16 @@ class ScheduleCalendar extends PureComponent<ScheduleCalendarProps, ScheduleCale
                     >
                         <ClickAwayListener onClickAway={this.handleClosePopover}>
                             <Box>
-                                <CourseCalendarEvent
+                                <CourseCalendarEventDisplay
                                     key={this.state.calendarEventKey}
                                     closePopover={this.handleClosePopover}
-                                    courseInMoreInfo={this.state.courseInMoreInfo as CalendarEvent}
+                                    courseInMoreInfo={this.state.courseInMoreInfo as AnyCalendarEvent}
                                     scheduleNames={this.state.scheduleNames}
                                 />
                             </Box>
                         </ClickAwayListener>
                     </Popper>
-                    <Calendar<CalendarEvent, object>
+                    <Calendar<AnyCalendarEvent, object>
                         localizer={localizer}
                         toolbar={false}
                         formats={{
@@ -304,7 +309,7 @@ class ScheduleCalendar extends PureComponent<ScheduleCalendarProps, ScheduleCale
                         events={events}
                         eventPropGetter={ScheduleCalendar.eventStyleGetter}
                         showMultiDayTimes={false}
-                        components={{ event: AntAlmanacEvent({ classes }) }}
+                        components={{ event: AntAlmanacEvent }}
                         onSelectEvent={this.handleEventClick}
                     />
                 </div>

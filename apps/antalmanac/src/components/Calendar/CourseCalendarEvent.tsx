@@ -98,7 +98,10 @@ interface CommonCalendarEvent extends Event {
 }
 
 export interface CourseEvent extends CommonCalendarEvent {
-    bldg: string; // E.g., ICS 174, which is actually building + room
+    /**
+     * @example ICS 174. Which is actually building + room.
+     */
+    bldg: string; 
     finalExam: string;
     instructors: string[];
     isCustomEvent: false;
@@ -108,161 +111,201 @@ export interface CourseEvent extends CommonCalendarEvent {
 }
 
 /**
- * There is another CustomEvent interface in CourseCalendarEvent and they are slightly different.  The this one represents only one day, like the event on Monday, and needs to be duplicated to be repeated across multiple days. The other one, `CustomEventDialog`'s `RepeatingCustomEvent`, encapsulates the occurences of an event on multiple days, like Monday Tuesday Wednesday all in the same object as specified by the `days` array.
+ * There is another CustomEvent interface in CourseCalendarEvent and they are slightly different.
+ *
+ * The this one represents only one day, like the event on Monday, and needs to be duplicated to be repeated across multiple days.
+ * The other one, `CustomEventDialog`'s `RepeatingCustomEvent`, encapsulates the occurences of an event on multiple days, like Monday Tuesday Wednesday all in the same object as specified by the `days` array.
  * https://github.com/icssc/AntAlmanac/wiki/The-Great-AntAlmanac-TypeScript-Rewritening%E2%84%A2#duplicate-interface-names-%EF%B8%8F
+ *
+ * TODO: DON'T USE `CustomEvent` as an interface.
+ *
+ * This is a global interface and is subject to declaration merging.
  */
-export interface CustomEvent extends CommonCalendarEvent {
+export interface CustomCalendarEvent extends CommonCalendarEvent {
     customEventID: number;
     isCustomEvent: true;
     bldg: string;
 }
 
-export type CalendarEvent = CourseEvent | CustomEvent;
+export type AnyCalendarEvent = CourseEvent | CustomCalendarEvent;
 
 interface CourseCalendarEventProps {
     classes: ClassNameMap;
-    courseInMoreInfo: CalendarEvent;
+    courseInMoreInfo: CourseEvent;
     scheduleNames: string[];
     closePopover: () => void;
 }
 
-const CourseCalendarEvent = (props: CourseCalendarEventProps) => {
+function CourseCalendarEvent(props: CourseCalendarEventProps) {
     const { classes, courseInMoreInfo } = props;
-    if (!courseInMoreInfo.isCustomEvent) {
-        const { term, instructors, sectionCode, title, finalExam, bldg } = courseInMoreInfo;
+    const { term, instructors, sectionCode, title, finalExam, bldg } = courseInMoreInfo;
 
-        return (
-            <Paper className={classes.courseContainer}>
-                <div className={classes.titleBar}>
-                    <span className={classes.title}>{title}</span>
-                    <Tooltip title="Delete">
-                        <IconButton
-                            size="small"
-                            onClick={() => {
-                                deleteCourse(sectionCode, term);
-                                logAnalytics({
-                                    category: analyticsEnum.calendar.title,
-                                    action: analyticsEnum.calendar.actions.DELETE_COURSE,
-                                });
-                            }}
-                        >
-                            <Delete fontSize="inherit" />
-                        </IconButton>
-                    </Tooltip>
-                </div>
-                <table className={classes.table}>
-                    <tbody>
-                        <tr>
-                            <td className={classes.alignToTop}>Section code</td>
-                            <Tooltip title="Click to copy course code" placement="right">
-                                <td className={classes.rightCells}>
-                                    <Button
-                                        size="small"
-                                        onClick={(e) => {
-                                            logAnalytics({
-                                                category: analyticsEnum.calendar.title,
-                                                action: analyticsEnum.calendar.actions.COPY_COURSE_CODE,
-                                            });
-                                            clickToCopy(e, sectionCode);
-                                        }}
-                                    >
-                                        <u>{sectionCode}</u>
-                                    </Button>
-                                </td>
-                            </Tooltip>
-                        </tr>
-                        <tr>
-                            <td className={classes.alignToTop}>Term</td>
-                            <td className={classes.rightCells}>{term}</td>
-                        </tr>
-                        <tr>
-                            <td className={classes.alignToTop}>Instructors</td>
-                            <td className={`${classes.multiline} ${classes.rightCells}`}>{instructors.join('\n')}</td>
-                        </tr>
-                        <tr>
-                            <td className={classes.alignToTop}>Location</td>
-                            <td className={`${classes.multiline} ${classes.rightCells}`}>
+    return (
+        <Paper className={classes.courseContainer}>
+            <div className={classes.titleBar}>
+                <span className={classes.title}>{title}</span>
+                <Tooltip title="Delete">
+                    <IconButton
+                        size="small"
+                        onClick={() => {
+                            deleteCourse(sectionCode, term);
+                            logAnalytics({
+                                category: analyticsEnum.calendar.title,
+                                action: analyticsEnum.calendar.actions.DELETE_COURSE,
+                            });
+                        }}
+                    >
+                        <Delete fontSize="inherit" />
+                    </IconButton>
+                </Tooltip>
+            </div>
+            <table className={classes.table}>
+                <tbody>
+                    <tr>
+                        <td className={classes.alignToTop}>Section code</td>
+                        <Tooltip title="Click to copy course code" placement="right">
+                            <td className={classes.rightCells}>
+                                <Button
+                                    size="small"
+                                    onClick={(e) => {
+                                        logAnalytics({
+                                            category: analyticsEnum.calendar.title,
+                                            action: analyticsEnum.calendar.actions.COPY_COURSE_CODE,
+                                        });
+                                        clickToCopy(e, sectionCode);
+                                    }}
+                                >
+                                    <u>{sectionCode}</u>
+                                </Button>
+                            </td>
+                        </Tooltip>
+                    </tr>
+                    <tr>
+                        <td className={classes.alignToTop}>Term</td>
+                        <td className={classes.rightCells}>{term}</td>
+                    </tr>
+                    <tr>
+                        <td className={classes.alignToTop}>Instructors</td>
+                        <td className={`${classes.multiline} ${classes.rightCells}`}>{instructors.join('\n')}</td>
+                    </tr>
+                    <tr>
+                        <td className={classes.alignToTop}>Location</td>
+                        <td className={`${classes.multiline} ${classes.rightCells}`}>
+                            <button
+                                className={classes.clickableLocation}
+                                onClick={() => selectBuilding({ location: bldg, courseName: title })}
+                            >
+                                {bldg}
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Final</td>
+                        <td className={classes.rightCells}>{finalExam}</td>
+                    </tr>
+                    <tr>
+                        <td>Color</td>
+                        <td className={`${classes.colorPicker} ${classes.stickToRight}`}>
+                            <ColorPicker
+                                color={courseInMoreInfo.color}
+                                isCustomEvent={courseInMoreInfo.isCustomEvent}
+                                sectionCode={courseInMoreInfo.sectionCode}
+                                term={courseInMoreInfo.term}
+                                analyticsCategory={analyticsEnum.calendar.title}
+                            />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </Paper>
+    );
+}
+
+interface CustomEventComponentProps {
+    classes: ClassNameMap;
+    courseInMoreInfo: CustomCalendarEvent;
+    scheduleNames: string[];
+    closePopover: () => void;
+}
+
+function CustomCalendarEvent(props: CustomEventComponentProps) {
+    const { classes, courseInMoreInfo } = props;
+    const { title, customEventID, bldg } = courseInMoreInfo;
+
+    return (
+        <Paper className={classes.customEventContainer}>
+            <div className={classes.title}>{title}</div>
+            <table className={classes.table}>
+                <tbody>
+                    <tr>
+                        <td className={classes.alignToTop}>Location: </td>
+                        <td className={`${classes.multiline} ${classes.rightCells}`}>
+                            {
                                 <button
                                     className={classes.clickableLocation}
-                                    onClick={() => selectBuilding({ location: bldg, courseName: title })}
+                                    onClick={() =>
+                                        selectBuilding({
+                                            location: bldg.includes('(') ? bldg.split('(')[1].slice(0, -1) : bldg,
+                                            courseName: title,
+                                        })
+                                    }
                                 >
                                     {bldg}
                                 </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Final</td>
-                            <td className={classes.rightCells}>{finalExam}</td>
-                        </tr>
-                        <tr>
-                            <td>Color</td>
-                            <td className={`${classes.colorPicker} ${classes.stickToRight}`}>
-                                <ColorPicker
-                                    color={courseInMoreInfo.color}
-                                    isCustomEvent={courseInMoreInfo.isCustomEvent}
-                                    sectionCode={courseInMoreInfo.sectionCode}
-                                    term={courseInMoreInfo.term}
-                                    analyticsCategory={analyticsEnum.calendar.title}
-                                />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </Paper>
-        );
-    } else {
-        const { title, customEventID, bldg } = courseInMoreInfo;
-        return (
-            <Paper className={classes.customEventContainer}>
-                <div className={classes.title}>{title}</div>
-                <table className={classes.table}>
-                    <tbody>
-                        <tr>
-                            <td className={classes.alignToTop}>Location:  </td>
-                            <td className={`${classes.multiline} ${classes.rightCells}`}>
-                                { <button
-                                    className={classes.clickableLocation}
-                                    onClick={() => selectBuilding({ location: bldg.includes('(') ? (bldg.split('(')[1].slice(0, -1)) : bldg, courseName: title })}
-                                >
-                                    {bldg}
-                                </button> }
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div className={classes.buttonBar}>
-                    <div className={`${classes.colorPicker}`}>
-                        <ColorPicker
-                            color={courseInMoreInfo.color}
-                            isCustomEvent={true}
-                            customEventID={courseInMoreInfo.customEventID}
-                            analyticsCategory={analyticsEnum.calendar.title}
-                        />
-                    </div>
-                    <CustomEventDialog
-                        onDialogClose={props.closePopover}
-                        customEvent={AppStore.schedule.getExistingCustomEvent(customEventID)}
-                        scheduleNames={props.scheduleNames}
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div className={classes.buttonBar}>
+                <div className={`${classes.colorPicker}`}>
+                    <ColorPicker
+                        color={courseInMoreInfo.color}
+                        isCustomEvent={true}
+                        customEventID={courseInMoreInfo.customEventID}
+                        analyticsCategory={analyticsEnum.calendar.title}
                     />
-
-                    <Tooltip title="Delete">
-                        <IconButton
-                            onClick={() => {
-                                props.closePopover();
-                                deleteCustomEvent(customEventID);
-                                logAnalytics({
-                                    category: analyticsEnum.calendar.title,
-                                    action: analyticsEnum.calendar.actions.DELETE_CUSTOM_EVENT,
-                                });
-                            }}
-                        >
-                            <Delete fontSize="small" />
-                        </IconButton>
-                    </Tooltip>
                 </div>
-            </Paper>
-        );
-    }
-};
+                <CustomEventDialog
+                    onDialogClose={props.closePopover}
+                    customEvent={AppStore.schedule.getExistingCustomEvent(customEventID)}
+                    scheduleNames={props.scheduleNames}
+                />
 
-export default withStyles(styles)(CourseCalendarEvent);
+                <Tooltip title="Delete">
+                    <IconButton
+                        onClick={() => {
+                            props.closePopover();
+                            deleteCustomEvent(customEventID);
+                            logAnalytics({
+                                category: analyticsEnum.calendar.title,
+                                action: analyticsEnum.calendar.actions.DELETE_CUSTOM_EVENT,
+                            });
+                        }}
+                    >
+                        <Delete fontSize="small" />
+                    </IconButton>
+                </Tooltip>
+            </div>
+        </Paper>
+    );
+}
+
+interface CalendarEventProps {
+    classes: ClassNameMap;
+    courseInMoreInfo: AnyCalendarEvent;
+    scheduleNames: string[];
+    closePopover: () => void;
+}
+
+function CalendarEvent(props: CalendarEventProps) {
+    const { courseInMoreInfo } = props;
+
+    if (!courseInMoreInfo.isCustomEvent) {
+        return <CourseCalendarEvent {...props} courseInMoreInfo={courseInMoreInfo} />;
+    } else {
+        return <CustomCalendarEvent {...props} courseInMoreInfo={courseInMoreInfo} />;
+    }
+}
+
+export default withStyles(styles)(CalendarEvent);

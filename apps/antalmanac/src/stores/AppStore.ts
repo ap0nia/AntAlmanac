@@ -4,7 +4,7 @@ import { VariantType } from 'notistack';
 import { ScheduleCourse, ScheduleSaveState } from './schedule.types';
 import { Schedules } from './Schedules';
 import { SnackbarPosition } from '$components/AppBar/NotificationSnackbar';
-import { CalendarEvent, CourseEvent } from '$components/Calendar/CourseCalendarEvent';
+import { AnyCalendarEvent, CourseEvent } from '$components/Calendar/CourseCalendarEvent';
 import { RepeatingCustomEvent } from '$components/Calendar/Toolbar/CustomEventDialog/CustomEventDialog';
 
 class AppStore extends EventEmitter {
@@ -17,7 +17,7 @@ class AppStore extends EventEmitter {
     snackbarPosition: SnackbarPosition;
     snackbarStyle: object; // not sure what this is. I don't think we ever use it
     theme: string;
-    eventsInCalendar: CalendarEvent[];
+    eventsInCalendar: AnyCalendarEvent[];
     finalsEventsInCalendar: CourseEvent[];
     unsavedChanges: boolean;
 
