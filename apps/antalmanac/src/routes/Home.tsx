@@ -3,6 +3,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { Box, CssBaseline, useMediaQuery, useTheme } from '@material-ui/core';
 
+import Header from '$components/Header';
 import Bar from '$components/AppBar/CustomAppBar';
 import MobileHome from '$components/MobileHome';
 import PatchNotes from '$components/PatchNotes';
@@ -19,6 +20,7 @@ export default function Home() {
             <CssBaseline />
             <PatchNotes />
             <Bar />
+            <Header />
             {isMobileScreen ? (
                 <MobileHome />
             ) : (

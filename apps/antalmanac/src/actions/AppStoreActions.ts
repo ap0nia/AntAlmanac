@@ -102,6 +102,7 @@ export const loadSchedule = async (userId: string, rememberMe: boolean) => {
         label: userId,
         value: rememberMe ? 1 : 0,
     });
+
     if (
         userId != null &&
         (!AppStore.hasUnsavedChanges() ||
