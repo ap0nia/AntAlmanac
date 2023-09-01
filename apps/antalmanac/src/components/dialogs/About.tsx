@@ -1,6 +1,4 @@
 import { useCallback } from 'react';
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
 import {
     Button,
     Dialog,
@@ -8,9 +6,9 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Link,
     type DialogProps,
 } from '@mui/material';
+import { MuiMarkdown } from '$components/MuiMarkdown';
 
 const markdown = `
 AntAlmanac is a schedule planning tool for UCI students.
@@ -48,16 +46,7 @@ export function AboutDialog(props: DialogProps) {
 
             <DialogContent>
                 <DialogContentText>
-                    <ReactMarkdown
-                        rehypePlugins={[rehypeRaw]}
-                        components={{
-                            a: ({ node, ...props }) => {
-                                return <Link target="_blank" {...props} />;
-                            },
-                        }}
-                    >
-                        {markdown}
-                    </ReactMarkdown>
+                    <MuiMarkdown>{markdown}</MuiMarkdown>
                 </DialogContentText>
             </DialogContent>
 

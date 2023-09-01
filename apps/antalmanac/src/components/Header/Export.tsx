@@ -14,9 +14,9 @@ export function ExportPopoverContent() {
 }
 
 export function ExportButton() {
-    const [anchorEl, setAnchorEl] = useState<HTMLElement>();
+    const [anchorEl, setAnchorEl] = useState<Element>();
 
-    const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleClick = useCallback((event: React.MouseEvent) => {
         setAnchorEl(event.currentTarget);
     }, []);
 

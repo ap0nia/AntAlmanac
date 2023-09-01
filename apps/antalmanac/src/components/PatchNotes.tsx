@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Link } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { MuiMarkdown } from '$components/MuiMarkdown';
 
 /**
  * Show modal only if the current patch notes haven't been shown.
@@ -58,16 +57,7 @@ function PatchNotes() {
             <DialogTitle>{"What's New - August 2023"}</DialogTitle>
 
             <DialogContent>
-                <ReactMarkdown
-                    rehypePlugins={[rehypeRaw]}
-                    components={{
-                        a: ({ node, ...props }) => {
-                            return <Link target="_blank" {...props} />;
-                        },
-                    }}
-                >
-                    {markdown}
-                </ReactMarkdown>
+                <MuiMarkdown>{markdown}</MuiMarkdown>
             </DialogContent>
 
             <DialogActions>

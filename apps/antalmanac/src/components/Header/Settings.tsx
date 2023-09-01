@@ -32,7 +32,7 @@ function SettingsPopover(props: SettingsPopoverProps) {
         setAnchorEl(undefined);
     }, []);
 
-    const handleChange = useCallback((_e: React.MouseEvent<HTMLElement, MouseEvent>, value: string) => {
+    const handleChange = useCallback((_event: unknown, value: string) => {
         /**
          * The result of this will be reflected by the AppStore.on('themeToggle') listener
          */
