@@ -8,7 +8,7 @@ import MobileHome from '$components/MobileHome';
 import PatchNotes from '$components/PatchNotes';
 import Calendar from '$components/Calendar/CalendarRoot';
 import DesktopTabs from '$components/RightPane/RightPaneRoot';
-import NotificationSnackbar from '$components/AppBar/NotificationSnackbar';
+import NotificationSnackbar from '$components/NotificationSnackbar';
 
 export default function Home() {
     const isMobileScreen = useMediaQuery('(max-width: 750px)');

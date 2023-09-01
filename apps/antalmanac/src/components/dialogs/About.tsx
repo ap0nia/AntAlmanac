@@ -52,7 +52,6 @@ export function AboutDialog(props: DialogProps) {
                         rehypePlugins={[rehypeRaw]}
                         components={{
                             a: ({ node, ...props }) => {
-                                console.log({ node, props });
                                 return <Link target="_blank" {...props} />;
                             },
                         }}
