@@ -17,6 +17,7 @@ import { CloudDownload as CloudDownloadIcon } from '@mui/icons-material';
 
 import { loadSchedule } from '$actions/AppStoreActions';
 import { isDarkMode } from '$lib/helpers';
+import { useLoadingStore } from '$stores/loading';
 
 function getSavedUserId(): string | null {
     if (typeof window === 'undefined') {
@@ -28,6 +29,11 @@ function getSavedUserId(): string | null {
 }
 
 export function LoadScheduleButton(props: ButtonProps = {}) {
+    const [loadedSchedule, setLoadedSchedule] = useLoadingStore((state) => [
+        state.loadedSchedule,
+        state.setLoadedSchedule,
+    ]);
+
     const [open, setOpen] = useState(false);
 
     const [rememberMe, setRememberMe] = useState(true);
@@ -65,15 +71,26 @@ export function LoadScheduleButton(props: ButtonProps = {}) {
     }, [userId, rememberMe, handleLoadSchedule]);
 
     /**
-     * On mount, try to find the username stored locally and automatically load their schedule.
+     * Try to find the username stored locally and automatically load their schedule.
+     *
+     * Only happens once when opening the application for the first time.
      */
     useEffect(() => {
+        // If already attempted to load the schedule for the first time, don't try again.
+        if (loadedSchedule) {
+            return;
+        }
+
         const userId = getSavedUserId();
+
         if (userId !== null) {
             handleLoadSchedule(userId, rememberMe);
         }
+
+        setLoadedSchedule(true);
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [loadedSchedule]);
 
     return (
         <>
