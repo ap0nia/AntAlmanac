@@ -3,12 +3,13 @@ import html2canvas from 'html2canvas';
 import { Button, IconButton, Link, Tooltip, useTheme } from '@mui/material';
 import { Panorama as PanoramaIcon, PhotoCamera as PhotoCameraIcon } from '@mui/icons-material';
 import analyticsEnum, { logAnalytics } from '$lib/analytics';
+import { screenshotElementId } from '$lib/constants';
 
 interface Props {
     /**
      * Provide a React ref to the element to screenshot.
      */
-    imgRef: React.RefObject<HTMLElement>;
+    imgRef?: React.RefObject<HTMLElement>;
 
     /**
      * Whether to only show the icon.
@@ -28,7 +29,9 @@ export default function ScreenshotButton({ imgRef, iconOnly }: Props) {
     const ref = useRef<HTMLAnchorElement>(null);
 
     const handleClick = async () => {
-        if (!imgRef.current || !ref.current) {
+        const elementToScreenshot = imgRef?.current ?? document.getElementById(screenshotElementId);
+
+        if (!elementToScreenshot || !ref.current) {
             return;
         }
 
@@ -37,7 +40,7 @@ export default function ScreenshotButton({ imgRef, iconOnly }: Props) {
             action: analyticsEnum.calendar.actions.SCREENSHOT,
         });
 
-        const canvas = await html2canvas(imgRef.current, {
+        const canvas = await html2canvas(elementToScreenshot, {
             scale: 2.5,
             backgroundColor: theme.palette.background.paper,
         });
@@ -56,9 +59,9 @@ export default function ScreenshotButton({ imgRef, iconOnly }: Props) {
                     </IconButton>
                 ) : (
                     <Button
-                        onClick={handleClick}
-                        variant="outlined"
                         size="small"
+                        color="inherit"
+                        onClick={handleClick}
                         startIcon={<PanoramaIcon fontSize="small" />}
                     >
                         Screenshot

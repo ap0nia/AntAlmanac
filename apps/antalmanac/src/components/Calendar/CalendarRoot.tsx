@@ -11,6 +11,7 @@ import { Calendar, DateLocalizer, momentLocalizer, Views } from 'react-big-calen
 import CalendarToolbar from './CalendarToolbar';
 import CourseCalendarEvent, { CalendarEvent } from './CourseCalendarEvent';
 import AppStore from '$stores/AppStore';
+import { screenshotElementId } from '$lib/constants';
 
 const localizer = momentLocalizer(moment);
 
@@ -259,7 +260,7 @@ class ScheduleCalendar extends PureComponent<ScheduleCalendarProps, ScheduleCale
                     scheduleNames={this.state.scheduleNames}
                 />
                 <div
-                    id="screenshot"
+                    id={screenshotElementId}
                     style={
                         !this.state.screenshotting
                             ? calStyling

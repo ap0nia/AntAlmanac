@@ -5,16 +5,18 @@ import News from './News';
 import Feedback from './Feedback';
 import { DownloadButton } from '$components/buttons/Download';
 import { LoadScheduleButton } from '$components/buttons/LoadSchedule';
+import ScreenshotButton from '$components/buttons/Screenshot';
 
 export function Header() {
     return (
         <Box>
-            <DownloadButton />
             <LoadScheduleButton />
             <Settings />
-            <About />
-            <News />
+            <DownloadButton />
+            <ScreenshotButton />
             <Feedback />
+            <News />
+            <About />
         </Box>
     );
 }
