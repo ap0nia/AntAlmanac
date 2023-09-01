@@ -7,8 +7,8 @@ import { ScreenshotButton } from '$components/buttons/Screenshot';
 export function ExportPopoverContent() {
     return (
         <Stack minWidth="12.25rem">
-            <DownloadButton />
-            <ScreenshotButton />
+            <DownloadButton color="inherit" />
+            <ScreenshotButton color="inherit" />
         </Stack>
     );
 }
@@ -79,11 +79,11 @@ export function ExportMenuItem() {
                 onClose={handleClose}
                 anchorOrigin={{
                     vertical: 'bottom',
-                    horizontal: 'center',
+                    horizontal: 'left',
                 }}
                 transformOrigin={{
                     vertical: 'top',
-                    horizontal: 'center',
+                    horizontal: 'right',
                 }}
             >
                 <ExportPopoverContent />
