@@ -4,7 +4,6 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { Box, CssBaseline, useMediaQuery, useTheme } from '@mui/material';
 
 import Header from '$components/Header';
-import Bar from '$components/AppBar/CustomAppBar';
 import MobileHome from '$components/MobileHome';
 import PatchNotes from '$components/PatchNotes';
 import Calendar from '$components/Calendar/CalendarRoot';
@@ -21,8 +20,6 @@ export default function Home() {
             <CssBaseline />
 
             <PatchNotes />
-
-            <Bar />
 
             <Header />
 
