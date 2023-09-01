@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import Split from 'react-split';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -15,6 +16,8 @@ export default function Home() {
 
     const theme = useTheme();
 
+    const backgroundColor = useMemo(() => theme.palette.primary.main, [theme.palette.primary.main]);
+
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <CssBaseline />
@@ -27,6 +30,7 @@ export default function Home() {
                 <MobileHome />
             ) : (
                 <Split
+                    key={backgroundColor}
                     sizes={[50, 50]}
                     minSize={100}
                     expandToMin={false}
@@ -37,10 +41,7 @@ export default function Home() {
                     direction="horizontal"
                     cursor="col-resize"
                     style={{ display: 'flex' }}
-                    gutterStyle={() => ({
-                        backgroundColor: theme.palette.primary.main,
-                        width: '10px',
-                    })}
+                    gutterStyle={() => ({ backgroundColor, width: '10px' })}
                 >
                     <Box>
                         <Calendar isMobile={false} />
