@@ -9,6 +9,7 @@ import {
     DialogTitle,
     FormControlLabel,
     TextField,
+    Tooltip,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { CloudDownload as CloudDownloadIcon } from '@mui/icons-material';
@@ -76,9 +77,11 @@ export function LoadScheduleButton() {
     }, []);
     return (
         <>
-            <LoadingButton onClick={handleOpen} color="inherit" startIcon={<CloudDownloadIcon />} loading={loading}>
-                Load
-            </LoadingButton>
+            <Tooltip title="Load schedule">
+                <LoadingButton onClick={handleOpen} color="inherit" startIcon={<CloudDownloadIcon />} loading={loading}>
+                    Load
+                </LoadingButton>
+            </Tooltip>
 
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Load</DialogTitle>

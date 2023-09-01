@@ -2,7 +2,7 @@ import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import superjson from 'superjson';
 import type { AppRouter } from '../../../../backend/src/routers';
 
-function getEndpoint() {
+export function getEndpoint() {
     if (import.meta.env.VITE_ENDPOINT) {
         return `https://${import.meta.env.VITE_ENDPOINT}.api.antalmanac.com`;
     }
@@ -12,6 +12,9 @@ function getEndpoint() {
     return import.meta.env.MODE === 'development' ? `https://dev.api.antalmanac.com` : `https://api.antalmanac.com`;
 }
 
+/**
+ * This is a raw tRPC client. This shouldn't really be used at all.
+ */
 const trpc = createTRPCProxyClient<AppRouter>({
     links: [
         httpBatchLink({
