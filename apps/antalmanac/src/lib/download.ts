@@ -1,5 +1,5 @@
 import { saveAs } from 'file-saver';
-import { createEvents } from 'ics';
+import { createEvents, type EventAttributes } from 'ics';
 import { openSnackbar } from '$actions/AppStoreActions';
 import analyticsEnum, { logAnalytics } from '$lib/analytics';
 import { termData } from '$lib/termData';
@@ -323,4 +323,58 @@ export function exportCalendar() {
             console.log(err);
         }
     });
+}
+
+/**
+ * Alternative, more isolated implementation of {@link exportCalendar}.
+ */
+export function getEventsFromCourses(courses = AppStore.schedule.getCurrentCourses()): EventAttributes[] {
+    const events = courses.flatMap((course) => {
+        const {
+            term,
+            deptCode,
+            courseNumber,
+            courseTitle,
+            section: { sectionType, instructors, meetings, finalExam },
+        } = course;
+
+        const courseEvents: EventAttributes[] = meetings
+            .filter((meeting) => meeting.time !== 'TBA')
+            .map((meeting) => {
+                const bydays = getByDays(meeting.days);
+                const classStartDate = getClassStartDate(term, bydays);
+                const [firstClassStart, firstClassEnd] = getFirstClass(classStartDate, meeting.time);
+                const rrule = getRRule(bydays, getQuarter(term));
+
+                // Add VEvent to events array
+                return {
+                    productId: 'antalmanac/ics',
+                    startOutputType: 'local' as const,
+                    endOutputType: 'local' as const,
+                    title: `${deptCode} ${courseNumber} ${sectionType}`,
+                    description: `${courseTitle}\nTaught by ${instructors.join('/')}`,
+                    location: `${meeting.bldg}`,
+                    start: firstClassStart as DateTimeArray,
+                    end: firstClassEnd as DateTimeArray,
+                    recurrenceRule: rrule,
+                };
+            });
+
+        // Add Final to events
+        if (finalExam && finalExam !== 'TBA') {
+            const [examStart, examEnd] = getExamTime(finalExam, getYear(term));
+            courseEvents.push({
+                productId: 'antalmanac/ics',
+                startOutputType: 'local' as const,
+                endOutputType: 'local' as const,
+                title: `${deptCode} ${courseNumber} Final Exam`,
+                description: `Final Exam for ${courseTitle}`,
+                start: examStart as DateTimeArray,
+                end: examEnd as DateTimeArray,
+            });
+        }
+        return courseEvents;
+    });
+
+    return events;
 }

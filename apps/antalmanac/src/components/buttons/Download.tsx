@@ -1,19 +1,18 @@
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { createEvents } from 'ics';
 import { useSnackbar } from 'notistack';
-import { IconButton, Link, Tooltip } from '@mui/material';
+import { Button, Link, Tooltip } from '@mui/material';
 import { Download as DownloadIcon } from '@mui/icons-material';
 import { getEventsFromCourses, vTimeZoneSection } from '$lib/download';
 import analyticsEnum, { logAnalytics } from '$lib/analytics';
-import { useScheduleStore } from '$stores/schedule';
 
-export default function DownloadButton() {
-    const courses = useScheduleStore((store) => store.schedules[store.scheduleIndex].courses);
-    const { enqueueSnackbar } = useSnackbar();
+export function DownloadButton() {
     const ref = useRef<HTMLAnchorElement>(null);
 
-    const exportCalendar = () => {
-        const events = getEventsFromCourses(courses);
+    const { enqueueSnackbar } = useSnackbar();
+
+    const exportCalendar = useCallback(() => {
+        const events = getEventsFromCourses();
 
         createEvents(events, (err, val) => {
             logAnalytics({
@@ -43,14 +42,14 @@ export default function DownloadButton() {
 
             enqueueSnackbar('Schedule downloaded!', { variant: 'success' });
         });
-    };
+    }, []);
 
     return (
         <>
             <Tooltip title="Download Schedule (.ics)">
-                <IconButton onClick={exportCalendar}>
-                    <DownloadIcon fontSize="small" />
-                </IconButton>
+                <Button color="inherit" startIcon={<DownloadIcon fontSize="small" />} onClick={exportCalendar}>
+                    Download
+                </Button>
             </Tooltip>
             <Link ref={ref} sx={{ display: 'none' }} href="/">
                 Invisible link to download files
