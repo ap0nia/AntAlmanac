@@ -1,11 +1,11 @@
 import { useRef } from 'react';
 import html2canvas from 'html2canvas';
-import { Button, IconButton, Link, Tooltip, useTheme } from '@mui/material';
+import { Button, type ButtonProps, IconButton, Link, Tooltip, useTheme } from '@mui/material';
 import { Panorama as PanoramaIcon, PhotoCamera as PhotoCameraIcon } from '@mui/icons-material';
 import analyticsEnum, { logAnalytics } from '$lib/analytics';
 import { screenshotElementId } from '$lib/constants';
 
-interface Props {
+export interface ScreenshotButtonProps extends ButtonProps {
     /**
      * Provide a React ref to the element to screenshot.
      */
@@ -18,9 +18,11 @@ interface Props {
 }
 
 /**
- * Button that downloads a screenshot of the element referenced by {@link Props.imgRef}
+ * Button that downloads a screenshot of the element referenced by {@link ScreenshotButtonProps.imgRef}
  */
-export default function ScreenshotButton({ imgRef, iconOnly }: Props) {
+export function ScreenshotButton(props: ScreenshotButtonProps) {
+    const { imgRef, iconOnly, ...buttonProps } = props;
+
     const theme = useTheme();
 
     /**
@@ -54,16 +56,11 @@ export default function ScreenshotButton({ imgRef, iconOnly }: Props) {
         <>
             <Tooltip title="Get a screenshot of your schedule">
                 {iconOnly ? (
-                    <IconButton onClick={handleClick}>
+                    <IconButton onClick={handleClick} {...buttonProps}>
                         <PhotoCameraIcon />
                     </IconButton>
                 ) : (
-                    <Button
-                        size="small"
-                        color="inherit"
-                        onClick={handleClick}
-                        startIcon={<PanoramaIcon fontSize="small" />}
-                    >
+                    <Button onClick={handleClick} startIcon={<PanoramaIcon fontSize="small" />} {...buttonProps}>
                         Screenshot
                     </Button>
                 )}

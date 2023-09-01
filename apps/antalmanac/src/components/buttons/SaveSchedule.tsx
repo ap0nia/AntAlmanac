@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
     Button,
+    type ButtonProps,
     Checkbox,
     Dialog,
     DialogActions,
@@ -24,7 +25,7 @@ function getSavedUserId(): string | null {
     return userId;
 }
 
-export function SaveScheduleButton() {
+export function SaveScheduleButton(props: ButtonProps = {}) {
     const [open, setOpen] = useState(false);
 
     const [rememberMe, setRememberMe] = useState(true);
@@ -49,33 +50,21 @@ export function SaveScheduleButton() {
         setOpen(false);
     }, []);
 
-    const handleSubmit = useCallback(() => {
-        handleSaveSchedule(userId, rememberMe).then(() => {
-            setOpen(false);
-        });
-    }, [userId, rememberMe]);
-
     const handleSaveSchedule = useCallback(async (userId: string, rememberMe: boolean) => {
         setLoading(true);
         await saveSchedule(userId, rememberMe);
         setLoading(false);
     }, []);
 
-    /**
-     * If the user's schedule is found locally, automatically load it.
-     *
-     * Because of how setState is async and whatever, I don't trust on relying on the state userId
-     * for the onMount function.
-     */
-    useEffect(() => {
-        const userId = getSavedUserId();
-        if (userId !== null) {
-            handleSaveSchedule(userId, rememberMe);
-        }
-    }, []);
+    const handleSubmit = useCallback(() => {
+        handleSaveSchedule(userId, rememberMe).then(() => {
+            setOpen(false);
+        });
+    }, [userId, rememberMe, handleSaveSchedule]);
+
     return (
         <>
-            <LoadingButton onClick={handleOpen} color="inherit" startIcon={<SaveIcon />} loading={loading}>
+            <LoadingButton onClick={handleOpen} startIcon={<SaveIcon />} loading={loading} {...props}>
                 Save
             </LoadingButton>
 

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
     Button,
+    type ButtonProps,
     Checkbox,
     Dialog,
     DialogActions,
@@ -26,7 +27,7 @@ function getSavedUserId(): string | null {
     return userId;
 }
 
-export function LoadScheduleButton() {
+export function LoadScheduleButton(props: ButtonProps = {}) {
     const [open, setOpen] = useState(false);
 
     const [rememberMe, setRememberMe] = useState(true);
@@ -51,34 +52,33 @@ export function LoadScheduleButton() {
         setOpen(false);
     }, []);
 
-    const handleSubmit = useCallback(() => {
-        handleLoadSchedule(userId, rememberMe).then(() => {
-            setOpen(false);
-        });
-    }, [userId, rememberMe]);
-
     const handleLoadSchedule = useCallback(async (userId: string, rememberMe: boolean) => {
         setLoading(true);
         await loadSchedule(userId, rememberMe);
         setLoading(false);
     }, []);
 
+    const handleSubmit = useCallback(() => {
+        handleLoadSchedule(userId, rememberMe).then(() => {
+            setOpen(false);
+        });
+    }, [userId, rememberMe, handleLoadSchedule]);
+
     /**
-     * If the user's schedule is found locally, automatically load it.
-     *
-     * Because of how setState is async and whatever, I don't trust on relying on the state userId
-     * for the onMount function.
+     * On mount, try to find the username stored locally and automatically load their schedule.
      */
     useEffect(() => {
         const userId = getSavedUserId();
         if (userId !== null) {
             handleLoadSchedule(userId, rememberMe);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     return (
         <>
             <Tooltip title="Load schedule">
-                <LoadingButton onClick={handleOpen} color="inherit" startIcon={<CloudDownloadIcon />} loading={loading}>
+                <LoadingButton onClick={handleOpen} startIcon={<CloudDownloadIcon />} loading={loading} {...props}>
                     Load
                 </LoadingButton>
             </Tooltip>

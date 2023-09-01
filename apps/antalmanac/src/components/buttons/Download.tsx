@@ -1,12 +1,12 @@
 import { useCallback, useRef } from 'react';
 import { createEvents } from 'ics';
 import { useSnackbar } from 'notistack';
-import { Button, Link, Tooltip } from '@mui/material';
+import { Button, type ButtonProps, Link, Tooltip } from '@mui/material';
 import { Download as DownloadIcon } from '@mui/icons-material';
 import { getEventsFromCourses, vTimeZoneSection } from '$lib/download';
 import analyticsEnum, { logAnalytics } from '$lib/analytics';
 
-export function DownloadButton() {
+export function DownloadButton(props: ButtonProps = {}) {
     const ref = useRef<HTMLAnchorElement>(null);
 
     const { enqueueSnackbar } = useSnackbar();
@@ -42,12 +42,12 @@ export function DownloadButton() {
 
             enqueueSnackbar('Schedule downloaded!', { variant: 'success' });
         });
-    }, []);
+    }, [enqueueSnackbar]);
 
     return (
         <>
             <Tooltip title="Download Schedule (.ics)">
-                <Button color="inherit" startIcon={<DownloadIcon fontSize="small" />} onClick={exportCalendar}>
+                <Button startIcon={<DownloadIcon fontSize="small" />} onClick={exportCalendar} {...props}>
                     Download
                 </Button>
             </Tooltip>
