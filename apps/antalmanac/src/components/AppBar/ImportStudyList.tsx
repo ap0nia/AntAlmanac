@@ -22,14 +22,7 @@ import TermSelector from '../RightPane/CoursePane/SearchForm/TermSelector';
 import RightPaneStore from '../RightPane/RightPaneStore';
 import { addCustomEvent, openSnackbar } from '$actions/AppStoreActions';
 import analyticsEnum, { logAnalytics } from '$lib/analytics';
-import {
-    ZotCourseResponse,
-    addCoursesMultiple,
-    combineSOCObjects,
-    getCourseInfo,
-    queryWebsoc,
-    queryZotCourse,
-} from '$lib/helpers';
+import { ZotCourseResponse, addCoursesMultiple, getCourseInfo, queryWebsoc, queryZotCourse } from '$lib/helpers';
 import AppStore from '$stores/AppStore';
 
 const styles = {

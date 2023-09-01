@@ -1,12 +1,9 @@
-import { Button, Tooltip } from '@mui/material';
+import { Button, MenuItem, ListItemIcon, ListItemText, Tooltip } from '@mui/material';
 import { RateReview as RateReviewIcon } from '@mui/icons-material';
 
-/**
- * button that opens a modal with information about the project
- */
-export default function Feedback() {
+export function FeedbackButton() {
     return (
-        <Tooltip title="Give us feedback" placement="right">
+        <Tooltip title="Give us feedback">
             <Button
                 color="inherit"
                 startIcon={<RateReviewIcon />}
@@ -15,6 +12,19 @@ export default function Feedback() {
             >
                 Feedback
             </Button>
+        </Tooltip>
+    );
+}
+
+export function FeedbackMenuItem() {
+    return (
+        <Tooltip title="Give us feedback" placement="left">
+            <MenuItem target="_blank" href="https://forms.gle/k81f2aNdpdQYeKK8A">
+                <ListItemIcon>
+                    <RateReviewIcon />
+                </ListItemIcon>
+                <ListItemText>Feedback</ListItemText>
+            </MenuItem>
         </Tooltip>
     );
 }

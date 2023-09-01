@@ -1,28 +1,16 @@
 import { useCallback, useState } from 'react';
-import { AppBar, Box, IconButton, Popover, Stack, Toolbar, useMediaQuery, useTheme } from '@mui/material';
+import { AppBar, Box, IconButton, Menu, Toolbar, useMediaQuery, useTheme } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
-import About from './About';
-import Settings from './Settings';
-import News from './News';
-import Feedback from './Feedback';
-import Export from './Export';
+import { SettingsButton, SettingsMenuItem } from './Settings';
+import { ImportButton, ImportMenuItem } from './Import';
+import { ExportButton, ExportMenuItem } from './Export';
+import { NewsButton, NewsMenuItem } from './News';
+import { FeedbackButton, FeedbackMenuItem } from './Feedback';
+import { AboutButton, AboutMenuItem } from './About';
 import { ReactComponent as Logo } from './logo.svg';
 import { ReactComponent as MobileLogo } from './mobile-logo.svg';
 import { LoadScheduleButton } from '$components/buttons/LoadSchedule';
 import { SaveScheduleButton } from '$components/buttons/SaveSchedule';
-
-const dataButtons = [
-    <SaveScheduleButton color="inherit" key="save" />,
-    <LoadScheduleButton color="inherit" key="load" />,
-];
-
-const otherButtons = [
-    <Settings key="settings" />,
-    <Export key="export" />,
-    <Feedback key="feedback" />,
-    <News key="news" />,
-    <About key="about" />,
-];
 
 export function Header() {
     const isMobileScreen = useMediaQuery('(max-width:750px)');
@@ -49,32 +37,48 @@ export function Header() {
                 {isMobileScreen ? <MobileLogo height={32} /> : <Logo height={32} />}
 
                 <Box flexGrow={1} />
+
                 {isMobileScreen ? (
                     <Box>
-                        {dataButtons}
+                        <SaveScheduleButton color="inherit" key="save" />
+                        <LoadScheduleButton color="inherit" key="load" />
+
                         <IconButton onClick={handleClick}>
                             <MenuIcon />
                         </IconButton>
 
-                        <Popover
-                            open={Boolean(anchorEl)}
+                        <Menu
                             anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
                             onClose={handleClose}
                             anchorOrigin={{
                                 vertical: 'bottom',
-                                horizontal: 'left',
+                                horizontal: 'right',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
                             }}
                         >
-                            <Stack padding={1} alignItems="flex-start">
-                                {otherButtons}
-                            </Stack>
-                        </Popover>
+                            <SettingsMenuItem />
+                            <ImportMenuItem />
+                            <ExportMenuItem />
+                            <FeedbackMenuItem />
+                            <NewsMenuItem />
+                            <AboutMenuItem />
+                        </Menu>
                     </Box>
                 ) : (
-                    <Stack direction="row">
-                        {dataButtons}
-                        {otherButtons}
-                    </Stack>
+                    <>
+                        <SaveScheduleButton color="inherit" />
+                        <LoadScheduleButton color="inherit" />
+                        <SettingsButton />
+                        <ImportButton />
+                        <ExportButton />
+                        <FeedbackButton />
+                        <NewsButton />
+                        <AboutButton />
+                    </>
                 )}
             </Toolbar>
         </AppBar>

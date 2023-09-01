@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Link } from '@mui/material';
+import { Button, MenuItem, ListItemIcon, ListItemText, Tooltip } from '@mui/material';
 import { Info as InfoIcon } from '@mui/icons-material';
 import analyticsEnum, { logAnalytics } from '$lib/analytics';
+import { AboutDialog } from '$components/dialogs/About';
 
-export default function About() {
+export function AboutButton() {
     const [open, setOpen] = useState(false);
 
     const handleClick = useCallback(() => {
@@ -20,52 +21,43 @@ export default function About() {
 
     return (
         <>
-            <Button onClick={handleClick} color="inherit" startIcon={<InfoIcon />}>
-                About
-            </Button>
+            <Tooltip title="About us">
+                <Button onClick={handleClick} color="inherit" startIcon={<InfoIcon />}>
+                    About
+                </Button>
+            </Tooltip>
+            <AboutDialog open={open} onClose={handleClose} />
+        </>
+    );
+}
 
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>About</DialogTitle>
+export function AboutMenuItem() {
+    const [open, setOpen] = useState(false);
 
-                <DialogContent>
-                    <DialogContentText>
-                        AntAlmanac is a schedule planning tool for UCI students.
-                        <br />
-                        <br />
-                        Interested in helping out? Join our{' '}
-                        <Link target="_blank" href="https://discord.gg/GzF76D7UhY">
-                            Discord
-                        </Link>{' '}
-                        or checkout the{' '}
-                        <Link target="_blank" href="https://github.com/icssc/AntAlmanac">
-                            code on GitHub
-                        </Link>
-                        .
-                        <br />
-                        <br />
-                        This website is maintained by the{' '}
-                        <Link target="_blank" href="https://studentcouncil.ics.uci.edu/">
-                            ICS Student Council
-                        </Link>{' '}
-                        Projects Committee and built by students from the UCI community.
-                        <br />
-                        <br />
-                        <Link target="_blank" href="https://github.com/icssc/AntAlmanac/contributors">
-                            <img
-                                src="https://contrib.rocks/image?repo=icssc/antalmanac"
-                                width={'100%'}
-                                alt="AntAlmanac Contributors"
-                            />
-                        </Link>
-                    </DialogContentText>
-                </DialogContent>
+    const handleClick = useCallback(() => {
+        setOpen(true);
+        logAnalytics({
+            category: analyticsEnum.nav.title,
+            action: analyticsEnum.nav.actions.CLICK_ABOUT,
+        });
+    }, []);
 
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Close
-                    </Button>
-                </DialogActions>
-            </Dialog>
+    const handleClose = useCallback(() => {
+        setOpen(false);
+    }, []);
+
+    return (
+        <>
+            <Tooltip title="About us" placement="left">
+                <MenuItem onClick={handleClick}>
+                    <ListItemIcon>
+                        <InfoIcon />
+                    </ListItemIcon>
+                    <ListItemText>About</ListItemText>
+                </MenuItem>
+            </Tooltip>
+
+            <AboutDialog open={open} onClose={handleClose} />
         </>
     );
 }

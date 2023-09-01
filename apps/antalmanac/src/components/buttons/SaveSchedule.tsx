@@ -10,6 +10,7 @@ import {
     DialogTitle,
     FormControlLabel,
     TextField,
+    Tooltip,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Save as SaveIcon } from '@mui/icons-material';
@@ -64,9 +65,11 @@ export function SaveScheduleButton(props: ButtonProps = {}) {
 
     return (
         <>
-            <LoadingButton onClick={handleOpen} startIcon={<SaveIcon />} loading={loading} {...props}>
-                Save
-            </LoadingButton>
+            <Tooltip title="Save schedule">
+                <LoadingButton onClick={handleOpen} startIcon={<SaveIcon />} loading={loading} {...props}>
+                    Save
+                </LoadingButton>
+            </Tooltip>
 
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Save</DialogTitle>

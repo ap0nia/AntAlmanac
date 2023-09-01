@@ -61,9 +61,11 @@
         "react-input-mask": "^2.0.4",
         "react-lazyload": "^3.2.0",
         "react-leaflet": "^4.2.1",
+        "react-markdown": "^8.0.7",
         "react-router-dom": "^6.8.1",
         "react-split": "^2.0.14",
         "recharts": "^2.4.2",
+        "rehype-raw": "^6.1.1",
         "superjson": "^1.12.3",
         "websoc-fuzzy-search": "^0.10.0",
         "zustand": "^4.3.2"

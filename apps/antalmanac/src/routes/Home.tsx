@@ -1,7 +1,7 @@
 import Split from 'react-split';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { Box, CssBaseline, useMediaQuery, useTheme } from '@material-ui/core';
+import { Box, CssBaseline, useMediaQuery, useTheme } from '@mui/material';
 
 import Header from '$components/Header';
 import Bar from '$components/AppBar/CustomAppBar';
@@ -13,14 +13,19 @@ import NotificationSnackbar from '$components/AppBar/NotificationSnackbar';
 
 export default function Home() {
     const isMobileScreen = useMediaQuery('(max-width: 750px)');
+
     const theme = useTheme();
 
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <CssBaseline />
+
             <PatchNotes />
+
             <Bar />
+
             <Header />
+
             {isMobileScreen ? (
                 <MobileHome />
             ) : (

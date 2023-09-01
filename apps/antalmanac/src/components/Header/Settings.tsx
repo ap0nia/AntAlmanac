@@ -1,5 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Box, Button, Popover, ToggleButtonGroup, ToggleButton, Tooltip, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    ListItemIcon,
+    ListItemText,
+    MenuItem,
+    Popover,
+    ToggleButtonGroup,
+    ToggleButton,
+    Tooltip,
+} from '@mui/material';
 import {
     DarkMode as DarkModeIcon,
     LightMode as LightModeIcon,
@@ -9,17 +19,14 @@ import {
 import AppStore from '$stores/AppStore';
 import analyticsEnum, { logAnalytics } from '$lib/analytics';
 
-/**
- * icon button to open settings drawer
- */
-export default function Settings() {
-    const [colorScheme, setColorScheme] = useState(AppStore.getTheme());
+interface SettingsPopoverProps {
+    colorScheme: string;
+    anchorEl: Element | undefined;
+    setAnchorEl: React.Dispatch<React.SetStateAction<Element | undefined>>;
+}
 
-    const [anchorEl, setAnchorEl] = useState<HTMLElement>();
-
-    const handleOpen = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        setAnchorEl(e.currentTarget);
-    };
+function SettingsPopover(props: SettingsPopoverProps) {
+    const { colorScheme, anchorEl, setAnchorEl } = props;
 
     const handleClose = useCallback(() => {
         setAnchorEl(undefined);
@@ -37,6 +44,43 @@ export default function Settings() {
             label: value,
         });
     }, []);
+
+    return (
+        <Popover
+            open={Boolean(anchorEl)}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+            <Box sx={{ p: 2, '& .MuiSvgIcon-root': { mr: 1 } }}>
+                <ToggleButtonGroup exclusive fullWidth value={colorScheme} onChange={handleChange}>
+                    <ToggleButton value="light">
+                        <LightModeIcon fontSize="small" />
+                        Light
+                    </ToggleButton>
+                    <ToggleButton value="dark">
+                        <DarkModeIcon fontSize="small" />
+                        Dark
+                    </ToggleButton>
+                    <ToggleButton value="auto">
+                        <SettingsBrightnessIcon fontSize="small" />
+                        Auto
+                    </ToggleButton>
+                </ToggleButtonGroup>
+            </Box>
+        </Popover>
+    );
+}
+
+export function SettingsButton() {
+    const [colorScheme, setColorScheme] = useState(AppStore.getTheme());
+
+    const [anchorEl, setAnchorEl] = useState<Element>();
+
+    const handleOpen = (e: React.MouseEvent) => {
+        setAnchorEl(e.currentTarget);
+    };
 
     const handleThemeChange = useCallback(() => {
         setColorScheme(AppStore.getTheme());
@@ -56,31 +100,43 @@ export default function Settings() {
                     Settings
                 </Button>
             </Tooltip>
+            <SettingsPopover colorScheme={colorScheme} anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+        </>
+    );
+}
 
-            <Popover
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-            >
-                <Box sx={{ p: 2, '& .MuiSvgIcon-root': { mr: 1 } }}>
-                    <ToggleButtonGroup exclusive fullWidth value={colorScheme} onChange={handleChange}>
-                        <ToggleButton value="light">
-                            <LightModeIcon fontSize="small" />
-                            Light
-                        </ToggleButton>
-                        <ToggleButton value="dark">
-                            <DarkModeIcon fontSize="small" />
-                            Dark
-                        </ToggleButton>
-                        <ToggleButton value="auto">
-                            <SettingsBrightnessIcon fontSize="small" />
-                            Auto
-                        </ToggleButton>
-                    </ToggleButtonGroup>
-                </Box>
-            </Popover>
+export function SettingsMenuItem() {
+    const [colorScheme, setColorScheme] = useState(AppStore.getTheme());
+
+    const [anchorEl, setAnchorEl] = useState<Element>();
+
+    const handleOpen = (e: React.MouseEvent) => {
+        setAnchorEl(e.currentTarget);
+    };
+
+    const handleThemeChange = useCallback(() => {
+        setColorScheme(AppStore.getTheme());
+    }, []);
+
+    useEffect(() => {
+        AppStore.on('themeToggle', handleThemeChange);
+        return () => {
+            AppStore.off('themeToggle', handleThemeChange);
+        };
+    }, []);
+
+    return (
+        <>
+            <Tooltip title="Settings" placement="left">
+                <MenuItem onClick={handleOpen}>
+                    <ListItemIcon>
+                        <SettingsIcon />
+                    </ListItemIcon>
+                    <ListItemText>Settings</ListItemText>
+                </MenuItem>
+            </Tooltip>
+
+            <SettingsPopover colorScheme={colorScheme} anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
         </>
     );
 }
