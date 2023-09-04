@@ -46,7 +46,7 @@ export function DownloadButton(props: ButtonProps = {}) {
 
     return (
         <>
-            <Tooltip title="Download Schedule (.ics)">
+            <Tooltip title="Download Schedule (.ics)" placement="left">
                 <Button startIcon={<DownloadIcon fontSize="small" />} onClick={exportCalendar} {...props}>
                     Download
                 </Button>

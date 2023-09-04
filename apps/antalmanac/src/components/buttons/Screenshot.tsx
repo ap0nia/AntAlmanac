@@ -54,7 +54,7 @@ export function ScreenshotButton(props: ScreenshotButtonProps) {
 
     return (
         <>
-            <Tooltip title="Get a screenshot of your schedule">
+            <Tooltip title="Get a screenshot of your schedule" placement="left">
                 {iconOnly ? (
                     <IconButton onClick={handleClick} {...buttonProps}>
                         <PhotoCameraIcon />
